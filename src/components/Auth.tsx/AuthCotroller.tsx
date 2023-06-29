@@ -2,7 +2,20 @@ import express, { Request, Response } from "express";
 import { Division } from "../modals/Divison";
 import { UserContact } from "../modals/Station";
 
-
+export const Login = async (request: Request, response: Response) => {
+  const data = request.body.usernumber
+  const division = await UserContact.find({
+    number: data
+  }).count();
+  if (division === 0) {
+    return response.json({ Diisiondata: "userNotFound" });
+  } else {
+    const userdetail = await UserContact.find({
+      number: data
+    })
+    return response.json({ Diisiondata: userdetail });
+  }
+};
 
 export const home = async (request: Request, response: Response) => {
   const data = request.body.selectedLobby

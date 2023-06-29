@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { contact, home} from "./Auth.tsx/AuthCotroller";
+import { contact, home,Login} from "./Auth.tsx/AuthCotroller";
 
 const router = Router();
 
-router
+router.post('/login-by-number',Login)
 router.post('/get-all-Division',home)
 router.post('/get-user-contact',contact)
 
