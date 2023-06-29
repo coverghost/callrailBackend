@@ -48,9 +48,16 @@ export const contact = async (request: Request, response: Response) => {
 }
 
 
-export const insertdata =async (request: Request, response: Response) => {
-  
-  const csvfile = xlsx.readFile('C:/Users/ayush/Downloads/callrail.xlsx')
+export const insertdata = async (request: Request, response: Response) => {
+
+  // try {
+  //   await UserContact.deleteMany();
+  //   return response.send({ status: 200, message: 'success' });
+  // } catch (error) {
+  //   return response.status(500).send({ status: 500, message: 'Error inserting data', error });
+  // }
+
+  const csvfile = xlsx.readFile('C:/Users/ayush/Downloads/phonebook (2).xlsx')
 
   const sheet = csvfile.Sheets['call']
   const P_JSON= xlsx.utils.sheet_to_json(sheet)

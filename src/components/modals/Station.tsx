@@ -11,7 +11,7 @@ export interface UserContact {
 
 const UserContactSchema = new Schema<UserContact>({
     stationId: { type: String, required: false, default: "" },
-    number: { type: String, required: false, default: "",unique:true },
+    number: { type: String, required: true, unique:true },
     name: { type: String, required: false, default: "" },
     createdAt: { type: Date, default: Date.now() },
 });
