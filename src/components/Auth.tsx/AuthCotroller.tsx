@@ -8,7 +8,7 @@ export const Login = async (request: Request, response: Response) => {
     number: data
   }).count();
   if (division === 0) {
-    return response.json({ Diisiondata: "userNotFound" });
+    return response.json({ message: "userNotFound" });
   } else {
     const userdetail = await UserContact.find({
       number: data
