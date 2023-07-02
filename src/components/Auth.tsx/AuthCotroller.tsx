@@ -43,34 +43,42 @@ export const home = async (request: Request, response: Response) => {
 
 export const contact = async (request: Request, response: Response) => {
   const data = request.body.selectedLobby
+  const start_date = new Date();
+  console.log("START TIME --------->", start_date)
   const usercontact = await UserContact.find({ stationId: data })
+  console.log("END TIME --------->", new Date());
   return response.json({ Usercontactdata: usercontact });
 }
 
 
 export const insertdata = async (request: Request, response: Response) => {
 
-  // try {
-  //   await UserContact.deleteMany();
-  //   return response.send({ status: 200, message: 'success' });
-  // } catch (error) {
-  //   return response.status(500).send({ status: 500, message: 'Error inserting data', error });
-  // }
+  let data_delete = false
 
-  const csvfile = xlsx.readFile('C:/Users/ayush/Downloads/phonebook (2).xlsx')
 
-  const sheet = csvfile.Sheets['call']
-  const P_JSON = xlsx.utils.sheet_to_json(sheet)
-
-  try {
-    const result = await UserContact.insertMany(P_JSON);
-    if (result.length > 0) {
-      return response.send({ status: 200, message: 'success', count: result.length });
-    } else {
-      return response.send({ status: 201, message: 'no data found', count: result.length });
+  if (data_delete) {
+    try {
+      await UserContact.deleteMany();
+      return response.send({ status: 200, message: 'data deleted success' });
+    } catch (error) {
+      return response.status(500).send({ status: 500, message: 'Error inserting data', error });
     }
-  } catch (error) {
-    return response.status(500).send({ status: 500, message: 'Error inserting data', error });
+  } else {
+    const csvfile = xlsx.readFile('C:/Users/ayush/Downloads/phonebook (7).xlsx')
+
+    const sheet = csvfile.Sheets['call']
+    const P_JSON = xlsx.utils.sheet_to_json(sheet)
+
+    try {
+      const result = await UserContact.insertMany(P_JSON);
+      if (result.length > 0) {
+        return response.send({ status: 200, message: 'success', count: result.length });
+      } else {
+        return response.send({ status: 201, message: 'no data found', count: result.length });
+      }
+    } catch (error) {
+      return response.status(500).send({ status: 500, message: 'Error inserting data', error });
+    }
   }
 }
 
