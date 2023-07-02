@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --exec ts-node-dev --exit-child src/index.ts",
+    "prod": "nodemon --exec ts-node-dev --exit-child src/index.ts prod",
     "start": "ts-node src/index.ts"
   },
   "keywords": [],
@@ -29,6 +30,7 @@
     "cors": "^2.8.5",
     "csv-parser": "^3.0.0",
     "csvtojson": "^2.0.10",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "helmet": "^6.1.5",
     "jsonwebtoken": "^9.0.0",
