@@ -1,26 +1,10 @@
 import express, { Request, Response } from "express";
 import { Division } from "../modals/Divison";
 import { UserContact } from "../modals/Station";
-import multer from 'multer'
 import xlsx from 'xlsx';
 
 export const Login = async (request: Request, response: Response) => {
   const data = request.body.usernumber
-  // try {
-  //   await Division.create({
-  //     lobbyId: "BSP",
-  //     code: "BSP",
-  //     name: "bilashpur",
-  //   },{
-  //     lobbyId: "BSP",
-  //     code: "SDL",
-  //     name: "shahdol",
-  //   }
-  //   )
-  //   return response.json({ message: "user created" });
-  // } catch (error) {
-  //   return response.json({ Error: error });
-  // }
   const division = await UserContact.find({
     number: data
   }).count();
@@ -44,9 +28,7 @@ export const home = async (request: Request, response: Response) => {
 export const contact = async (request: Request, response: Response) => {
   const data = request.body.selectedLobby
   const start_date = new Date();
-  console.log("START TIME --------->", start_date)
   const usercontact = await UserContact.find({ stationId: data })
-  console.log("END TIME --------->", new Date());
   return response.json({ Usercontactdata: usercontact });
 }
 

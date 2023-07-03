@@ -11,7 +11,6 @@ const corsConfig = {
   methods: '*',
 };
 const args = process.argv.slice(2);
-console.log("line 14 ---------->",args)
 
 // Process the arguments
 if (args.length === 0) {
@@ -29,6 +28,6 @@ application.use('/', router);
 
 
 connectToDatabase()
-application.listen(PORT, () => {
+application.listen(PORT, '0.0.0.0', () => {
   console.log(`server running on ${PORT}`);
 });
