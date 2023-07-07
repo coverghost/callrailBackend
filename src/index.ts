@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import router from './components/router';
-import { connectToDatabase, db } from './components/config/database';
+import { connectToDatabase } from './components/config/database';
 const PORT = 3150
 const application = express();
 application.use(express.json());
@@ -28,6 +28,6 @@ application.use('/', router);
 
 
 connectToDatabase()
-application.listen(PORT, '0.0.0.0', () => {
+application.listen(PORT, () => {
   console.log(`server running on ${PORT}`);
 });
