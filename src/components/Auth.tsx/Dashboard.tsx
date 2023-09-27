@@ -11,6 +11,7 @@ const Listlobby = async (request: Request, response: Response) => {
     return response.json({ Lobby: lobby });
 }
 
+
 const Updatelobby = async (request: Request, response: Response) => {
     const dataForUpdate = request.body.updateLobby
     try {
@@ -184,40 +185,6 @@ const InserDatabyFile = async (request: Request, response: Response) => {
     }
 };
 
-
-
-
-// const insertdata = async (request: Request, response: Response) => {
-//     console.log("request from frontend===>", request.body)
-
-//     let data_delete = false
-
-
-//     if (data_delete) {
-//         try {
-//             await UserContact.deleteMany({ stationId: { $in: ["BSP(Station etc.)", "Nagpur(Station etc.)", "Raipur(Station etc.)"] } });
-//             return response.send({ status: 200, message: 'data deleted success' });
-//         } catch (error) {
-//             return response.status(500).send({ status: 500, message: 'Error inserting data', error });
-//         }
-//     } else {
-//         const csvfile = xlsx.readFile('C:/Users/ayush/Downloads/phonebook (17).xlsx')
-
-//         const sheet = csvfile.Sheets['call']
-//         const P_JSON = xlsx.utils.sheet_to_json(sheet)
-
-//         try {
-//             const result = await UserContact.insertMany(P_JSON);
-//             if (result.length > 0) {
-//                 return response.send({ status: 200, message: 'success', count: result.length });
-//             } else {
-//                 return response.send({ status: 201, message: 'no data found', count: result.length });
-//             }
-//         } catch (error) {
-//             return response.status(500).send({ status: 500, message: 'Error inserting data', error });
-//         }
-//     }
-// }
 
 export const Dashboard = {
     Listlobby,
