@@ -47,41 +47,6 @@ const Deletedlobby = async (request: Request, response: Response) => {
     }
 }
 
-const insertdata = async (request: Request, response: Response) => {
-    if (request.file) {
-        try {
-            const file: Express.Multer.File | any = request.file; // Access the uploaded file using request.file
-
-            if (!file) {
-                return response.status(400).send({ status: 400, message: 'File not provided' });
-            }
-            const workbook = xlsx.read(file.buffer, { type: 'buffer' });
-            const sheetNames = (workbook.SheetNames).toLocaleString();
-            const sheet = workbook.Sheets[sheetNames];
-            const P_JSON = xlsx.utils.sheet_to_json(sheet);
-            const result = await UserContact.insertMany(P_JSON);
-
-            if (result.length > 0) {
-                return response.send({ status: 200, message: 'success', count: result.length });
-            } else {
-                return response.send({ status: 201, message: 'no data found', count: result.length });
-            }
-        } catch (error) {
-            return response.status(500).send({ status: 500, message: 'Error inserting data', error });
-        }
-    } else {
-        try {
-            await UserContact.insertMany({
-                stationId: request.body.stationId,
-                number: request.body.number,
-                name: request.body.name,
-            });
-            return response.send({ status: 200, message: 'contact insertd Succefully', });
-        } catch (error) {
-            return response.status(500).send({ status: 500, message: 'Error inserting data', error });
-        }
-    }
-};
 
 const Usercontact = async (request: Request, response: Response) => {
     // const usercontact = await UserContact.find({})
@@ -100,20 +65,16 @@ const Usercontact = async (request: Request, response: Response) => {
 
 const insertNumber = async (request: Request, response: Response) => {
     const data = request.body
-    console.log("body line ==[ 100 ]==>", { Data: data, Name: data.name, Phone: data.number, lobby: data.lobby })
 
     try {
         const User_exist = await UserContact.findOne({ number: data.number })
         if (User_exist) {
-
             return response.status(500).send({ status: 500, message: 'User already exist', User: User_exist });
-            return response.send({ status: 200, message: 'User already exist', User: User_exist });
-
         } else {
             await UserContact.create({
-                stationId: data.lobby,
-                number: data.number,
-                name: data.name,
+                stationId: (data.lobby).trim(),
+                number: (data.number).trim(),
+                name: (data.name).trim(),
             })
             return response.send({ status: 200, message: 'contact insertd Succefully', });
         }
@@ -157,9 +118,9 @@ const InserDatabyFile = async (request: Request, response: Response) => {
                         uninsertedCount++
                     } else {
                         await UserContact.create({
-                            stationId: item.stationId,
-                            number: item.number,
-                            name: item.name,
+                            stationId: (item.stationId).trim(),
+                            number: (item.number).trim(),
+                            name: (item.name).trim(),
                         });
                         insertedCount++
                     }
@@ -174,7 +135,7 @@ const InserDatabyFile = async (request: Request, response: Response) => {
                 message: 'Contacts already exists',
                 matchedNumber: matchedNumber,
                 uninsertedNumber: uninsertedCount,
-                insertedCount:insertedCount
+                insertedCount: insertedCount
             });
         } else {
             return response.status(400).send({ status: 400, message: 'No file uploaded' });
@@ -190,7 +151,6 @@ export const Dashboard = {
     Listlobby,
     Updatelobby,
     insertlobby,
-    insertdata,
     Deletedlobby,
     Usercontact,
     insertNumber,

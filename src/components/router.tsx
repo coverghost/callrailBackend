@@ -14,7 +14,6 @@ router.post('/get-all-Division', home)
 router.post('/get-user-contact', contact)
 
 //for super admin
-router.post('/insert-number-by-excel', upload.single('file'), Dashboard.insertdata);
 router.post('/insert-number', Dashboard.insertNumber)
 router.post('/insert-lobby', Dashboard.insertlobby)
 router.get('/list-lobby', Dashboard.Listlobby)
