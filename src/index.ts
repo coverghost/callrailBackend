@@ -3,7 +3,6 @@ import cors from 'cors';
 import helmet from 'helmet';
 import router from './components/router';
 import { connectToDatabase } from './components/config/database';
-const PORT = 3150
 const application = express();
 application.use(express.json());
 const corsConfig = {
@@ -28,6 +27,6 @@ application.use('/', router);
 
 
 connectToDatabase()
-application.listen(PORT, () => {
-  console.log(`server running on ${PORT}`);
+application.listen((process.env.PORT), () => {
+  console.log(`server running on ${(process.env.PORT)}`);
 });

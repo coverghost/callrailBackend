@@ -10,8 +10,8 @@ export interface Division {
 }
 
 const DivisionSchema = new Schema<Division>({
-    lobbyId: { type: String, required: false, default: "" },
-    code: { type: String, required: false, default: "" },
+    lobbyId: { type: String, required: true, default: "" },
+    code: { type: String, required: true, default: "" },
     name: { type: String, required: false, default: "" },
     createdAt: { type: Date, default: Date.now() },
 });
