@@ -11,6 +11,13 @@ const Listlobby = async (request: Request, response: Response) => {
     return response.json({ Lobby: lobby });
 }
 
+const totalLCAdmin = async (request: Request, response: Response) => {
+    const BSP_Lobby = await Division.find({ lobbyId: "BSP" }).count()
+    const RAIPUR_Lobby = await Division.find({ lobbyId: "RAIPUR" }).count()
+    const NAGPUR_Lobby = await Division.find({ lobbyId: "NAGPUR" }).count()
+    return response.status(200).send({ BSP_Lobby: BSP_Lobby, RAIPUR_Lobby: RAIPUR_Lobby, NAGPUR_Lobby: NAGPUR_Lobby })
+}
+
 
 const Updatelobby = async (request: Request, response: Response) => {
     const dataForUpdate = request.body.updateLobby
@@ -25,10 +32,13 @@ const Updatelobby = async (request: Request, response: Response) => {
 }
 
 const insertlobby = async (request: Request, response: Response) => {
+    const lobbyData = request.body
+    console.log("lobbyData ==>", lobbyData)
     try {
         await Division.create({
-            lobbyId: request.body.lobbyId,
-            code: request.body.code,
+            lobbyId: lobbyData.station,
+            code: lobbyData.lobbyCode,
+            name: lobbyData.name
         });
         return response.send({ status: 200, message: 'Lobby Created successfully...!' });
     } catch (error: any) {
@@ -37,31 +47,19 @@ const insertlobby = async (request: Request, response: Response) => {
 }
 
 const Deletedlobby = async (request: Request, response: Response) => {
-    console.log('Deletedlobby', request.body.whereLobby)
+    const DataForDelete = request.body
+
+    const lobbybyId = await Division.findOne({ _id: DataForDelete.id })
+    console.log("Deleted contact [ 50 ]====>", lobbybyId)
     try {
-        const lobby = await Division.deleteOne({ code: request.body.whereLobby })
-        await UserContact.deleteMany({ stationId: request.body.whereLobby })
-        return response.json({ Lobby: lobby, message: "Lobby deleted successfully...!" });
+        const lobby = await Division.deleteOne({ _id: DataForDelete.id })
+        await UserContact.deleteMany({ stationId: lobbybyId?.code })
+        return response.status(200).send({ status: 200, message: "Lobby deleted successfully...!" });
     } catch (error) {
         return response.status(500).send({ status: 500, message: 'delete error', error });
     }
 }
 
-
-const Usercontact = async (request: Request, response: Response) => {
-    // const usercontact = await UserContact.find({})
-    // return response.json({ Usercontactdata: usercontact });
-    try {
-        await UserContact.create({
-            stationId: "DBEC",
-            number: "9752493789",
-            name: "TMG SANDEEP GUPTA",
-        });
-        return response.send({ status: 200, message: 'contact insertd Succefully', });
-    } catch (error) {
-        return response.status(500).send({ status: 500, message: 'Error inserting data', error });
-    }
-}
 
 const insertNumber = async (request: Request, response: Response) => {
     const data = request.body
@@ -92,10 +90,8 @@ const getlobbycode = async (request: Request, response: Response) => {
 
 const adminContact = async (request: Request, response: Response) => {
     const data = request.body
-    console.log("data=", data);
     const usercontact = await UserContact.find({ stationId: data.lobbycode })
     return response.send({ status: 200, usercontact: usercontact });
-
 }
 
 const InserDatabyFile = async (request: Request, response: Response) => {
@@ -118,9 +114,9 @@ const InserDatabyFile = async (request: Request, response: Response) => {
                         uninsertedCount++
                     } else {
                         await UserContact.create({
-                            stationId: (item.stationId).trim(),
-                            number: (item.number).trim(),
-                            name: (item.name).trim(),
+                            stationId: item.stationId,
+                            number: item.number,
+                            name: item.name,
                         });
                         insertedCount++
                     }
@@ -146,15 +142,38 @@ const InserDatabyFile = async (request: Request, response: Response) => {
     }
 };
 
+const updateData = async (request: Request, response: Response) => {
+    const DataForUpdate = request.body
+    try {
+        await UserContact.updateOne({ _id: DataForUpdate.UserId }, { $set: { stationId: DataForUpdate.stationId, number: DataForUpdate.number, name: DataForUpdate.name } })
+        return response.send({ status: 200, usercontact: DataForUpdate });
+    } catch (error) {
+        return response.status(500).send({ status: 500, message: 'Internal server error' });
+    }
+
+}
+
+const Deletedcontact = async (request: Request, response: Response) => {
+    const DataForDelete = request.body
+    try {
+        await UserContact.deleteOne({ _id: DataForDelete.id })
+        return response.status(200).send({ status: 200, message: "contact deleted successfully...!" });
+    } catch (error) {
+        return response.status(500).send({ status: 500, message: 'delete error', error });
+    }
+
+}
 
 export const Dashboard = {
     Listlobby,
     Updatelobby,
     insertlobby,
     Deletedlobby,
-    Usercontact,
     insertNumber,
     getlobbycode,
     adminContact,
-    InserDatabyFile
+    InserDatabyFile,
+    totalLCAdmin,
+    updateData,
+    Deletedcontact,
 }
