@@ -33,7 +33,6 @@ const Updatelobby = async (request: Request, response: Response) => {
 
 const insertlobby = async (request: Request, response: Response) => {
     const lobbyData = request.body
-    console.log("lobbyData ==>", lobbyData)
     try {
         await Division.create({
             lobbyId: lobbyData.station,
@@ -50,7 +49,6 @@ const Deletedlobby = async (request: Request, response: Response) => {
     const DataForDelete = request.body
 
     const lobbybyId = await Division.findOne({ _id: DataForDelete.id })
-    console.log("Deleted contact [ 50 ]====>", lobbybyId)
     try {
         const lobby = await Division.deleteOne({ _id: DataForDelete.id })
         await UserContact.deleteMany({ stationId: lobbybyId?.code })
@@ -154,6 +152,7 @@ const updateData = async (request: Request, response: Response) => {
 }
 
 const Deletedcontact = async (request: Request, response: Response) => {
+
     const DataForDelete = request.body
     if (DataForDelete.lobbyCode) {
         try {
@@ -173,6 +172,35 @@ const Deletedcontact = async (request: Request, response: Response) => {
 
 }
 
+const profileChange = async (request: Request, response: Response) => {
+    const profile = request.body;
+
+    console.log("profile =>", profile)
+}
+
+const totalcontacts = async (request: Request, response: Response) => {
+    try {
+        const lobbyIdGet = await Division.distinct("lobbyId");
+
+        const lobbyCode = await Promise.all(
+            lobbyIdGet.map(async (lobbyId) => {
+                const lobbyCodeId = await Division.find({ lobbyId });
+                const codes = await Promise.all(
+                    lobbyCodeId.map(async (data) => {
+                        const count = await UserContact.find({ stationId: data.code }).count();
+                        return { code: data.code, count };
+                    })
+                );
+                return { station: lobbyId, codes };
+            })
+        );
+        return response.status(200).send({ status: 200, lobbyCode: lobbyCode });
+    } catch (error) {
+        console.error("Error:", error);
+        return response.status(500).send({ status: 500, error: "Internal Server Error" });
+    }
+}
+
 
 export const Dashboard = {
     Listlobby,
@@ -186,4 +214,6 @@ export const Dashboard = {
     totalLCAdmin,
     updateData,
     Deletedcontact,
+    profileChange,
+    totalcontacts
 }
