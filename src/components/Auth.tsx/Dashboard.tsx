@@ -155,14 +155,24 @@ const updateData = async (request: Request, response: Response) => {
 
 const Deletedcontact = async (request: Request, response: Response) => {
     const DataForDelete = request.body
-    try {
-        await UserContact.deleteOne({ _id: DataForDelete.id })
-        return response.status(200).send({ status: 200, message: "contact deleted successfully...!" });
-    } catch (error) {
-        return response.status(500).send({ status: 500, message: 'delete error', error });
+    if (DataForDelete.lobbyCode) {
+        try {
+            await UserContact.deleteMany({ stationId: DataForDelete.lobbyCode })
+            return response.status(200).send({ status: 200, message: "all contact deleted successfully...!" });
+        } catch (error) {
+            return response.status(500).send({ status: 500, message: 'delete error', error });
+        }
+    } else {
+        try {
+            await UserContact.deleteOne({ _id: DataForDelete.id })
+            return response.status(200).send({ status: 200, message: "contact deleted successfully...!" });
+        } catch (error) {
+            return response.status(500).send({ status: 500, message: 'delete error', error });
+        }
     }
 
 }
+
 
 export const Dashboard = {
     Listlobby,
