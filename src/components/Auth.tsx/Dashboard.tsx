@@ -172,11 +172,6 @@ const Deletedcontact = async (request: Request, response: Response) => {
 
 }
 
-const profileChange = async (request: Request, response: Response) => {
-    const profile = request.body;
-
-    console.log("profile =>", profile)
-}
 
 const totalcontacts = async (request: Request, response: Response) => {
     try {
@@ -214,6 +209,5 @@ export const Dashboard = {
     totalLCAdmin,
     updateData,
     Deletedcontact,
-    profileChange,
     totalcontacts
 }

@@ -27,9 +27,6 @@ router.get('/total-c-l-admin', Dashboard.totalLCAdmin)
 router.post('/update-contact', Dashboard.updateData)
 router.post('/delete-contact', Dashboard.Deletedcontact)
 
-
-
-router.post('/profile-change', Dashboard.profileChange)
 router.get('/total-contacts', Dashboard.totalcontacts)
 
 
